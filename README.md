@@ -160,11 +160,9 @@ Open your browser: [http://localhost:5173](http://localhost:5173)
 
 ## 👨‍💻 Author
 
-- **Your Name** – [GitHub](https://github.com/yourusername)
-- 📧 your.email@example.com
+- **Your Name** – [Santanu Raj](https://github.com/santanu0101)
+- 📧 santanuraj75@gmail.com
 
 ---
 
-## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
