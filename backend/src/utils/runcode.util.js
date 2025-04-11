@@ -1,47 +1,68 @@
-import { exec } from "child_process";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-import { v4 as uuid } from "uuid";
+import { writeFileSync, unlinkSync } from 'fs';
+import { spawn } from 'child_process';
+import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const runCode = (language, code, input = '', callback) => {
+  const id = uuidv4();
+  let extension = '', command = '', args = [];
 
-const runCode = (language, code, callback) => {
-  const filename = uuid();
-  const dir = path.join(__dirname, "../temp");
-  const extMap = { js: "js", py: "py", cpp: "cpp" };
-  const filePath = path.join(dir, `${filename}.${extMap[language]}`);
-
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
+  switch (language) {
+    case 'py':
+      extension = 'py';
+      command = 'python3';
+      break;
+    case 'js':
+      extension = 'js';
+      command = 'node';
+      break;
+    case 'cpp':
+      extension = 'cpp';
+      break;
+    default:
+      return callback(new Error('Unsupported language'));
   }
 
-  fs.writeFile(filePath, code, (err) => {
-    if (err) return callback(err, null);
+  const filename = `${id}.${extension}`;
+  const filepath = path.join(process.cwd(), filename);
 
-    let command;
-    switch (language) {
-      case "js":
-        command = `node ${filePath}`;
-        break;
-      case "py":
-        command = `python3 ${filePath}`;
-        break;
-      case "cpp":
-        command = `g++ ${filePath} -o ${filePath}.out && ${filePath}.out`;
-        break;
-      default:
-        return callback(new Error('Unsupported language'), null)
-    }
+  writeFileSync(filepath, code);
 
-    exec(command, (err, stdout, stderr)=>{
-        fs.unlinkSync(filePath);
-        if(language === 'cpp') fs.unlinkSync(`${filePath}.out`)
-        if(err)  return callback(null, stderr);
-        callback(null, stdout.trim())
-    })
-  });
+  if (language === 'cpp') {
+    const executable = `${id}.exe`;
+    console.log(executable)
+    const execPath = path.join(process.cwd(), executable);
+    console.log(execPath)
+    const compile = spawn('g++', [filepath, '-o', executable]);
+    console.log(compile)
+
+    compile.on('close', (code) => {
+      if (code !== 0) return callback(new Error('Compilation failed'));
+
+      const run = spawn(`./${executable}`);
+      handleIO(run, input, () => {
+        unlinkSync(filepath);
+        unlinkSync(execPath);
+      }, callback);
+    });
+  } else {
+    const run = spawn(command, [filepath]);
+    handleIO(run, input, () => unlinkSync(filepath), callback);
+  }
 };
 
-export default runCode
+function handleIO(proc, input, cleanup, callback) {
+  let output = '';
+  proc.stdin.write(input);
+  proc.stdin.end();
+
+  proc.stdout.on('data', data => output += data.toString());
+  proc.stderr.on('data', data => output += data.toString());
+
+  proc.on('close', () => {
+    cleanup();
+    callback(null, output.trim());
+  });
+}
+
+export default runCode;

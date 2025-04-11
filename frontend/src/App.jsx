@@ -6,7 +6,7 @@ import ReviewBox from './components/ReviewBox';
 import './App.css';
 
 const App = () => {
-  const [code, setCode] = useState('// Write your code here...');
+  const [code, setCode] = useState('');
   const [language, setLanguage] = useState('javascript');
   const [output, setOutput] = useState('');
   const [review, setReview] = useState('');
