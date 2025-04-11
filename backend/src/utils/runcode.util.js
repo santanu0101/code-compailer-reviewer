@@ -39,7 +39,7 @@ const runCode = (language, code, callback) => {
         fs.unlinkSync(filePath);
         if(language === 'cpp') fs.unlinkSync(`${filePath}.out`)
         if(err)  return callback(null, stderr);
-        callback(null, stdout)
+        callback(null, stdout.trim())
     })
   });
 };
