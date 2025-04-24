@@ -46,7 +46,7 @@ const runCode = (language, code, input = '', callback) => {
       }, callback);
     });
   } else {
-    const run = spawn(command, [filepath]);
+    const run = spawn(command, [filepath]); // python3 ./2834892734.py
     handleIO(run, input, () => unlinkSync(filepath), callback);
   }
 };
