@@ -29,7 +29,7 @@ const runCode = (language, code, input = '', callback) => {
   writeFileSync(filepath, code);
 
   if (language === 'cpp') {
-    const executable = `${id}.exe`;
+    const executable = `/temp/${id}.exe`;
     console.log(executable)
     const execPath = path.join(process.cwd(), executable);
     console.log(execPath)
