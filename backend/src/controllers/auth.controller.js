@@ -14,14 +14,13 @@ const transporter = nodemailer.createTransport({
     }
 })
 
+// .......... sendOTP ............
 const sendOTP = async (req, res) => {
   const {email}  = req.body;
   if (!email) {
     return res.status(400).json({ error: "email is required" });
   }
-
   
-
   const otp = generateOTP();
 //   console.log(otp);
   const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
@@ -40,6 +39,7 @@ const sendOTP = async (req, res) => {
   res.status(200).json({message: 'OTP sent'})
 };
 
+// .......... verifyOTP ............
 const verifyOTP = async (req, res)=>{
     const {email, otp} = req.body
     const user = await Auth.findOne({email})

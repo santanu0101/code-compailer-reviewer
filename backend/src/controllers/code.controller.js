@@ -1,6 +1,8 @@
 import { Question } from "../models/question.js";
 import runCode from "../utils/runcode.util.js";
 
+
+// .......... compaileCode ..........
 const compaileCode = (req, res) => {
   const { language, code, input } = req.body;
 
@@ -14,6 +16,7 @@ const compaileCode = (req, res) => {
   });
 };
 
+// .......... questionUpload ..........
 const questionUpload = async (req, res) => {
   try {
     const data = req.body;
@@ -31,6 +34,7 @@ const questionUpload = async (req, res) => {
   }
 };
 
+// .......... getAllQuestion ..........
 const getAllQuestion = async (req, res) => {
   try {
     const questions = await Question.find({}, "id title description");
@@ -43,6 +47,7 @@ const getAllQuestion = async (req, res) => {
   }
 };
 
+// .......... getQuestionById ..........
 const getQuestionById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -58,6 +63,8 @@ const getQuestionById = async (req, res) => {
   }
 };
 
+
+// .......... submitCode ..........
 const submitCode = async (req, res) => {
   try {
     const { code, language } = req.body;
