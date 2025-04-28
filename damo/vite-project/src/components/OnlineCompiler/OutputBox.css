@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+.output-container {
+    display: flex;
+    flex-direction: column;
+    height: 50%;
+    border-bottom: 1px solid var(--border-color);
+    overflow: hidden;
+  }
+  
+  .output-content {
+    flex: 1;
+    overflow: auto;
+    padding: 0;
+  }
+  
+  .output-content pre {
+    margin: 0;
+    padding: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+  }

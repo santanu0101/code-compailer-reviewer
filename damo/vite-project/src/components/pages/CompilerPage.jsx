@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
-import CodeEditor from "./components/CodeEditor";
-import OutputBox from "./components/OutputBox";
-import ReviewBox from "./components/ReviewBox";
-import "./App.css";
+import CodeEditor from "../OnlineCompiler/CodeEditor";
+import OutputBox from "../OnlineCompiler/OutputBox";
+import ReviewBox from "../OnlineCompiler/ReviewBox";
+import "./CompilerPage.css"
 
 
-const App = () => {
+const CompilerPage = () => {
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("javascript");
   const [output, setOutput] = useState("");
@@ -20,14 +20,13 @@ const App = () => {
     setOutput(""); // Clear previous output
 
     try {
-      // Make sure input is included in the request
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/compile`,
         {
           code,
           language:
             language === "cpp" ? "cpp" : language === "python" ? "py" : "js",
-          input, // This is the important part - include input in the API call
+          input,
         }
       );
 
@@ -120,8 +119,7 @@ const App = () => {
         </div>
       </main>
     </div>
-   
   );
 };
 
-export default App;
+export default CompilerPage;
